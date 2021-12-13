@@ -40,7 +40,7 @@ export default new VueRouter({
             }
         },
         {
-            path: "/search/:kewords",
+            path: "/search",
             component: search,
             name:"search",
             meta:{

@@ -4,14 +4,16 @@ import App from './App.vue'
 import router from '@/router'
 //引入自定义组件
 import TypeNav from "./components/TypeNav/TypeNav";
-import {reqGetBaseCategoryList} from "@/api";
+
+import store from "@/store"
 
 Vue.component('TypeNav',TypeNav)
-reqGetBaseCategoryList()
+
 Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
   //注册路由
   router,
+  store
 }).$mount('#app')

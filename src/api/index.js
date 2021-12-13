@@ -1,5 +1,5 @@
 import request from "./request";
 
-export const reqGetBaseCategoryList=()=>{
-    request.get('/product/getBaseCategoryList')
+export const reqGetBaseCategoryList= ()=>{
+   return request.get('/product/getBaseCategoryList')
 }
