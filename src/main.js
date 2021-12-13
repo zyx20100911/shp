@@ -3,9 +3,11 @@ import App from './App.vue'
 //在入口引入路由
 import router from '@/router'
 //引入自定义组件
-import TypeNav from "./view/Home/TypeNav";
-Vue.component('TypeNav',TypeNav)
+import TypeNav from "./components/TypeNav/TypeNav";
+import {reqGetBaseCategoryList} from "@/api";
 
+Vue.component('TypeNav',TypeNav)
+reqGetBaseCategoryList()
 Vue.config.productionTip = false
 
 new Vue({
