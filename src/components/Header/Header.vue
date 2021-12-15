@@ -53,13 +53,18 @@ export default {
   },
   methods: {
     toSearchPage() {
-      this.$router.push({//如果对象写法要写path的话，一定要写name,没有name只写path会报错
-        name: "search",path:'/search', params: {
-          kewords: this.keywords
-        }, query: {
-          k:this.keywords
+      //如果对象写法要写path的话，一定要写name,没有name只写path会报错
+      let location = {
+        name: "search",
+        params: {
+          keywords: this.keywords
         }
-      })
+      }
+      if (Object.keys(this.$route.query).length !== 0) {
+        location.query = this.$route.query
+      }
+      this.$router.push(location)
+
     },
   }
 }

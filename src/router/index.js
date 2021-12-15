@@ -27,6 +27,7 @@ export default new VueRouter({
         },
         {
             path: "/login",
+            name:'path',
             component: login,
             meta:{
                 isShowFooter:false
@@ -34,13 +35,14 @@ export default new VueRouter({
         },
         {
             path: "/register",
+            name:"register",
             component: register,
             meta:{
                 isShowFooter:false
             }
         },
         {
-            path: "/search",
+            path: "/search/:keywords?",
             component: search,
             name:"search",
             meta:{

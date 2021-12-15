@@ -2,9 +2,12 @@
   <div class="type-nav">
     <div>
       <div class="container">
+
         <div @mouseleave="curItem(-1)">
-          <h2 class="all">全部商品分类</h2>
-          <div class="sort">
+
+          <h2 @mouseenter="curItem"  class="all">全部商品分类</h2>
+          <Transition name="sort">
+          <div class="sort" v-show="isShow">
             <div class="all-sort-list2" @click="goSearch">
               <div class="item" @mouseenter="curItem(index)" v-for="(c1,index) in listData"
                    :class="{cur:curIndex=== index}" :key="c1.categoryId">
@@ -32,7 +35,9 @@
               </div>
             </div>
           </div>
+          </Transition>
         </div>
+
         <nav class="nav">
           <a href="###">服装城</a>
           <a href="###">美妆馆</a>
@@ -56,13 +61,22 @@ export default {
   name: "TypeNav",
   data() {
     return {
-      curIndex: -1
+      curIndex: -1,
+      isShow: true,
     }
   },
   mounted() {
-    this.$store.dispatch('getCategoryList')
+
+    this.isShowSort
   },
   computed: {
+    isShowSort() {
+      if (this.$route.name !== 'home') {
+        return this.isShow = false
+      } else {
+        return this.isShow = true
+      }
+    },
     ...mapState({
       listData: state => state.home.listData
     })
@@ -71,7 +85,15 @@ export default {
     //节流函数使用
     curItem: throttle(function (index) {
       this.curIndex = index
+      if(this.$route.name!=='home') {
+        if(index === -1){
+          this.isShow=false
+        }else {
+          this.isShow=true
+        }
+      }
     }, 50),
+
     goSearch(event) {
       let e = event.target
       let {categoryname, category1id, category2id, category3id} = e.dataset//获取自定义属性的值
@@ -86,6 +108,10 @@ export default {
           query.category3id = category3id
         }
         location.query = query//将保存有层级定位的临时变量，动态追加到请求参数里
+
+        if(Object.keys(this.$route.params).length!== 0){
+          location.params = this.$route.params
+        }
         this.$router.push(location)//进行路由跳转，带参数到搜索界面
       }
 
@@ -130,10 +156,11 @@ export default {
       left: 0;
       top: 45px;
       width: 210px;
-      height: 461px;
+      height: 473px;
       position: absolute;
       background: #fafafa;
       z-index: 999;
+
 
       .all-sort-list2 {
         .item {
@@ -203,10 +230,19 @@ export default {
               }
             }
           }
-
-
         }
       }
+    }
+    .sort-enter{
+      height:0px;
+    }
+    .sort-enter-active{
+      transition:all linear 0.5s ;
+      overflow: hidden;
+    }
+    .sort-enter-to{
+      height:473px;
+      opacity:1
     }
   }
 }
