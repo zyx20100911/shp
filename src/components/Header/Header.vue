@@ -34,7 +34,7 @@
         </h1>
         <div class="searchArea">
           <form action="###" class="searchForm">
-            <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keywords"/>
+            <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword"/>
             <button class="sui-btn btn-xlarge btn-danger" @click="toSearchPage" type="button">搜索</button>
           </form>
         </div>
@@ -48,7 +48,7 @@ export default {
   name: "Header",
   data() {
     return {
-      keywords: ''
+      keyword: ''
     }
   },
   methods: {
@@ -57,7 +57,7 @@ export default {
       let location = {
         name: "search",
         params: {
-          keywords: this.keywords
+          keyword: this.keyword||undefined//防止空值导致path不显示
         }
       }
       if (Object.keys(this.$route.query).length !== 0) {

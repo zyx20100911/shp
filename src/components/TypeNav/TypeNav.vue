@@ -12,7 +12,7 @@
               <div class="item" @mouseenter="curItem(index)" v-for="(c1,index) in listData"
                    :class="{cur:curIndex=== index}" :key="c1.categoryId">
                 <h3>
-                  <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{
+                  <a :data-categoryName="c1.categoryName" :data-category1id="c1.categoryId">{{
                       c1.categoryName
                     }}</a>
                 </h3>
@@ -20,12 +20,12 @@
                   <div class="subitem" v-for="c2 in c1.categoryChild" :key="c2.categoryId">
                     <dl class="fore">
                       <dt>
-                        <a :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId"
+                        <a :data-categoryName="c2.categoryName" :data-category2id="c2.categoryId"
                         >{{ c2.categoryName }}</a>
                       </dt>
                       <dd>
                         <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                          <a :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId"
+                          <a :data-categoryName="c3.categoryName" :data-category3id="c3.categoryId"
                           >{{ c3.categoryName }}</a>
                         </em>
                       </dd>
@@ -101,11 +101,11 @@ export default {
         let location = {name: "search"} //整理请求参数
         let query = {categoryName: categoryname}//临时变量
         if (category1id) {//根据自定义属性定位三级联动的层级
-          query.category1id = category1id
+          query.category1Id = category1id
         } else if (category2id) {
-          query.category2id = category2id
+          query.category2Id = category2id
         } else if (category3id) {
-          query.category3id = category3id
+          query.category3Id = category3id
         }
         location.query = query//将保存有层级定位的临时变量，动态追加到请求参数里
 

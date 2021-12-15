@@ -9,3 +9,5 @@ export  const reqGetBanner = () => {
 export const reqGetFloor = () => {
   return mock.get('/floor.json')
 }
+//Search模块的请求
+export const reqGetGoodsList = (params) => request.post('/list',params)

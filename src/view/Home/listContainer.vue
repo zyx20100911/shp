@@ -4,6 +4,7 @@
       <div class="center">
         <!--banner轮播-->
         <Carousel :list="bannerList" />
+    </div>
       <div class="right">
         <div class="news">
           <h4>
@@ -83,7 +84,6 @@
           <img src="./images/ad1.png"/>
         </div>
       </div>
-    </div>
   </div>
   </div>
 </template>

@@ -12,7 +12,6 @@ import '@/mock/mockServe.js'
 import 'swiper/css/swiper.css'
 
 Vue.component('TypeNav',TypeNav)
-
 Vue.config.productionTip = false
 
 new Vue({

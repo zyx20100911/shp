@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 import home from "../view/home";
 import login from "../view/login";
 import register from "../view/register";
-import search from "../view/search";
+import search from "../view/Search";
 
 //避免重复跳转报错 重写vueRouter原型方法
 const VueRouterPush = VueRouter.prototype.push
@@ -42,7 +42,7 @@ export default new VueRouter({
             }
         },
         {
-            path: "/search/:keywords?",
+            path: "/search/:keyword?",
             component: search,
             name:"search",
             meta:{
