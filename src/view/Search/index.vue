@@ -20,7 +20,7 @@
             <li class="with-x" v-if="this.paramsData.trademark">{{ this.paramsData.trademark.split(':')[1] }}
               <i @click="removeTrademark">×</i>
             </li>
-            <li class="with-x"v-for="(attr,index) in this.paramsData.props" :key="index">{{ attr.split(':')[1] }}
+            <li class="with-x" v-for="(attr,index) in this.paramsData.props" :key="index">{{ attr.split(':')[1] }}
               <i @click="removeAttr(index)">×</i>
             </li>
 
@@ -28,30 +28,23 @@
         </div>
 
         <!--selector-->
-        <SearchSelector :attrsList="attrsList" :trademarkList="trademarkList" @getTrademarks="getTrademarks" @getProps="getProps"/>
+        <SearchSelector :attrsList="attrsList" :trademarkList="trademarkList" @getTrademarks="getTrademarks"
+                        @getProps="getProps"/>
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{'active':isOne}" @click="changeOrder('1')">
+                  <a>综合
+                    <i class="iconfont" v-if="isOne" :class="{'icon-down':isDesc,'icon-up':isAsc}"></i>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{'active':isTwo}" @click="changeOrder('2')">
+                  <a>销量
+                  <i class="iconfont" v-if="isTwo"  :class="{'icon-down':isDesc,'icon-up':isAsc}"></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -135,7 +128,7 @@ export default {
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "",
+        order: "1:desc",//默认综合降序 排序方式1: 综合,2: 价格 asc: 升序,desc: 降序
         pageNo: 1,
         pageSize: 10,
         props: [],
@@ -157,6 +150,18 @@ export default {
     this.getDate()
   },
   computed: {
+    isOne() {
+      return this.paramsData.order.split(':')[0]==='1'
+    },
+    isTwo() {
+      return this.paramsData.order.split(':')[0]==='2'
+    },
+    isDesc() {
+      return this.paramsData.order.split(':')[1].indexOf('desc') !== -1
+    },
+    isAsc() {
+      return this.paramsData.order.split(':')[1].indexOf('asc') !== -1
+    },
     ...mapGetters({
       goodsList: 'search/goodsList',
       attrsList: 'search/attrsList',
@@ -189,36 +194,52 @@ export default {
       }
     },
     //删除Params参数tag方法
-    removeParams(){
+    removeParams() {
       this.$route.params.keyword = undefined
       this.paramsData.keyword = undefined
-      this.$bus.$emit('removeParams',this.paramsData.keyword)
+      this.$bus.$emit('removeParams', this.paramsData.keyword)
       if (this.$route.query) {
         this.$router.push({name: 'search', query: this.$route.query})
-      //  this.getDate()
+        //  this.getDate()
       }
     },
     //自定义事件，接收子组件中选中的品牌string
-    getTrademarks(data){
+    getTrademarks(data) {
       this.paramsData.trademark = data
       this.getDate()
     },
     //删除品牌
-    removeTrademark(){
-      this.paramsData.trademark=undefined
+    removeTrademark() {
+      this.paramsData.trademark = undefined
       this.getDate()
     },
     //自定义事件，接收子组件的商品属性数组
-    getProps(data){
-      this.paramsData.props=data
+    getProps(data) {
+      this.paramsData.props = data
       this.getDate()
     },
     //删除商品属性
-    removeAttr(index){
-      this.paramsData.props.splice(index,1)
+    removeAttr(index) {
+      this.paramsData.props.splice(index, 1)
       this.getDate()
+    },
+    //切换排序选中
+    changeOrder(flag) {
+      let order = this.paramsData.order
+      let orderArr = this.paramsData.order.split(':')
+      let orderFlag = orderArr[0]
+      let orderSort = orderArr[1]
+      if(flag=== orderFlag){//按钮传入的值跟响应式数据保存的值相等说明点击的是同一个按钮，只需要切换升降序
+        console.log(orderSort)
+        orderSort==='asc'? orderSort = 'desc':orderSort = 'asc';
+        console.log(orderSort)
+      }else {
+        orderSort = 'desc'
+        orderFlag=flag
+      }
+      order = `${orderFlag}:${orderSort}`
+      this.paramsData.order = order
     }
-
   },
   watch: {
     $route: {
