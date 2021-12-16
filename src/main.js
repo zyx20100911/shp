@@ -15,8 +15,12 @@ Vue.component('TypeNav',TypeNav)
 Vue.config.productionTip = false
 
 new Vue({
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
   render: h => h(App),
   //注册路由
   router,
+  //注册仓库
   store
 }).$mount('#app')

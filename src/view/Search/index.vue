@@ -11,15 +11,24 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="$route.query.categoryName">{{ $route.query.categoryName }}
+              <i @click="removeQuery">×</i>
+            </li>
+            <li class="with-x" v-if="$route.params.keyword">{{ $route.params.keyword }}
+              <i @click="removeParams">×</i>
+            </li>
+            <li class="with-x" v-if="this.paramsData.trademark">{{ this.paramsData.trademark.split(':')[1] }}
+              <i @click="removeTrademark">×</i>
+            </li>
+            <li class="with-x"v-for="(attr,index) in this.paramsData.props" :key="index">{{ attr.split(':')[1] }}
+              <i @click="removeAttr(index)">×</i>
+            </li>
+
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector/>
+        <SearchSelector :attrsList="attrsList" :trademarkList="trademarkList" @getTrademarks="getTrademarks" @getProps="getProps"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -131,7 +140,8 @@ export default {
         pageSize: 10,
         props: [],
         trademark: ""
-      }
+      },
+
     }
 
 
@@ -140,7 +150,8 @@ export default {
     SearchSelector
   },
   beforeMount() {
-    Object.assign(this.paramsData, this.$route.query, this.$route.params)//在调用接口前，把请求参数整理出来，从路由中获取请求参数
+    //在调用接口前，把请求参数整理出来，从路由中获取请求参数
+    Object.assign(this.paramsData, this.$route.query, this.$route.params)
   },
   mounted() {
     this.getDate()
@@ -155,23 +166,68 @@ export default {
   methods: {
     getDate() {
       //先清空有可能不传值的数据，避免上一次数据残留污染本次请求
-      this.paramsData.category1Id = ""
-      this.paramsData.category2Id = ""
-      this.paramsData.category3Id = ""
+      this.clearcategoryId()
       //调用接口前整理请求参数
       Object.assign(this.paramsData, this.$route.query, this.$route.params)
       //调用仓库action中的getGoodsList异步请求，第二个是传的请求参数
       this.$store.dispatch('search/getGoodsList', this.paramsData)
+    },
+    //清空数据
+    clearcategoryId() {
+      this.paramsData.category1Id = undefined
+      this.paramsData.category2Id = undefined
+      this.paramsData.category3Id = undefined
+    },
+    //删除Query参数tag方法
+    removeQuery() {
+      this.$route.query.categoryName = undefined
+      this.paramsData.categoryName = undefined
+      this.clearcategoryId()
+      if (this.$route.params) {
+        this.$router.push({name: 'search', params: this.$route.params})
+        // this.getDate() 路由每次变化都会监听调用方法这里可以不写（自我感觉）
+      }
+    },
+    //删除Params参数tag方法
+    removeParams(){
+      this.$route.params.keyword = undefined
+      this.paramsData.keyword = undefined
+      this.$bus.$emit('removeParams',this.paramsData.keyword)
+      if (this.$route.query) {
+        this.$router.push({name: 'search', query: this.$route.query})
+      //  this.getDate()
+      }
+    },
+    //自定义事件，接收子组件中选中的品牌string
+    getTrademarks(data){
+      this.paramsData.trademark = data
+      this.getDate()
+    },
+    //删除品牌
+    removeTrademark(){
+      this.paramsData.trademark=undefined
+      this.getDate()
+    },
+    //自定义事件，接收子组件的商品属性数组
+    getProps(data){
+      this.paramsData.props=data
+      this.getDate()
+    },
+    //删除商品属性
+    removeAttr(index){
+      this.paramsData.props.splice(index,1)
+      this.getDate()
     }
+
   },
-  watch:{
-    $route:{
-      handler(newValue,oldValue){
+  watch: {
+    $route: {
+      handler(newValue, oldValue) {
         //路由发生变化的时候调用方法
         this.getDate()
       },
-      deep:true,
-      immediate:true
+      deep: true,
+      immediate: true
     }
   }
 

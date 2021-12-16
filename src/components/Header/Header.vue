@@ -51,6 +51,7 @@ export default {
       keyword: ''
     }
   },
+
   methods: {
     toSearchPage() {
       //如果对象写法要写path的话，一定要写name,没有name只写path会报错
@@ -66,6 +67,16 @@ export default {
       this.$router.push(location)
 
     },
+  },
+  watch:{
+    $route:{
+      handler(){
+        //search组件里删掉keyword的tag的话，触发事件，这里的v-model里的keyword也清空
+        this.$bus.$on('removeParams',keyword=>{
+          this.keyword = keyword
+        })
+      }
+    }
   }
 }
 </script>
