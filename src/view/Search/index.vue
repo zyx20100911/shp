@@ -230,15 +230,14 @@ export default {
       let orderFlag = orderArr[0]
       let orderSort = orderArr[1]
       if(flag=== orderFlag){//按钮传入的值跟响应式数据保存的值相等说明点击的是同一个按钮，只需要切换升降序
-        console.log(orderSort)
         orderSort==='asc'? orderSort = 'desc':orderSort = 'asc';
-        console.log(orderSort)
-      }else {
-        orderSort = 'desc'
-        orderFlag=flag
+      }else {//否则说明用户切换按钮了
+        orderSort = 'desc'//切换按钮需要默认设置降序
+        orderFlag=flag//将flag值赋值给存的数据，让两者一致，下次点击传入的值继续进入if判断
       }
       order = `${orderFlag}:${orderSort}`
       this.paramsData.order = order
+      this.getDate()//每次点击都会重新拉一次数据
     }
   },
   watch: {
