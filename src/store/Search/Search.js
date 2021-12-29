@@ -29,6 +29,12 @@ const search = {
         },
         trademarkList(state) {
             return state.List.trademarkList || []
+        },
+        total(state) {
+            return state.List.total||0
+        },
+        totalPages(state){
+            return state.List.totalPages||0
         }
     }
 }

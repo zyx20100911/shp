@@ -3,6 +3,7 @@ import axios from "axios";
 import nprogress from 'nprogress'
 //引入进度条样式
 import 'nprogress/nprogress.css'
+import store from '@/store'
 
 const request = axios.create({
     baseURL: '/api',
@@ -12,6 +13,11 @@ const request = axios.create({
 request.interceptors.request.use(config => {
 //添加进度条-开始
     nprogress.start()
+    //给请求头加入uuid
+
+    if(store.state.shopCart.uuid){
+         config.headers.userTempId=store.state.shopCart.uuid
+    }
     return config
 })
 //响应拦截器

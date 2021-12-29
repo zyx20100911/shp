@@ -28,8 +28,7 @@
         </div>
 
         <!--selector-->
-        <SearchSelector :attrsList="attrsList" :trademarkList="trademarkList" @getTrademarks="getTrademarks"
-                        @getProps="getProps"/>
+        <SearchSelector :attrsList="attrsList" :trademarkList="trademarkList" @getTrademarks="getTrademarks" @getProps="getProps"/>
 
         <!--details-->
         <div class="details clearfix">
@@ -54,7 +53,7 @@
               <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"><img :src="good.defaultImg"/></a>
+                    <router-link :to="{path:'/detail/'+good.id}"><img :src="good.defaultImg"/></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -79,35 +78,8 @@
 
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!--全局组件-分页器-->
+         <Pagination :pageNo="paramsData.pageNo" :pageSize="paramsData.pageSize" :total="total" :continues="5" @getPageNo="getPageNo"/>
         </div>
       </div>
     </div>
@@ -166,6 +138,8 @@ export default {
       goodsList: 'search/goodsList',
       attrsList: 'search/attrsList',
       trademarkList: 'search/trademarkList',
+      total:'search/total',
+      totalPages:'search/totalPages'
     })
   },
   methods: {
@@ -225,19 +199,24 @@ export default {
     },
     //切换排序选中
     changeOrder(flag) {
-      let order = this.paramsData.order
+      let order = ''
       let orderArr = this.paramsData.order.split(':')
       let orderFlag = orderArr[0]
       let orderSort = orderArr[1]
-      if(flag=== orderFlag){//按钮传入的值跟响应式数据保存的值相等说明点击的是同一个按钮，只需要切换升降序
-        orderSort==='asc'? orderSort = 'desc':orderSort = 'asc';
-      }else {//否则说明用户切换按钮了
+      if (flag === orderFlag) {//按钮传入的值跟响应式数据保存的值相等说明点击的是同一个按钮，只需要切换升降序
+        orderSort === 'asc' ? orderSort = 'desc' : orderSort = 'asc';
+      } else {//否则说明用户切换按钮了
         orderSort = 'desc'//切换按钮需要默认设置降序
-        orderFlag=flag//将flag值赋值给存的数据，让两者一致，下次点击传入的值继续进入if判断
+        orderFlag = flag//将flag值赋值给存的数据，让两者一致，下次点击传入的值继续进入if判断
       }
       order = `${orderFlag}:${orderSort}`
       this.paramsData.order = order
       this.getDate()//每次点击都会重新拉一次数据
+    },
+    //分页
+    getPageNo(data){
+      this.paramsData.pageNo=data
+      this.getDate()
     }
   },
   watch: {

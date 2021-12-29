@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from '@/router'
 //引入自定义组件
 import TypeNav from "./components/TypeNav/TypeNav";
+import Pagination from "./components/Pagination"
 
 import store from "@/store"
 //引入mock文件执行一次
@@ -12,6 +13,7 @@ import '@/mock/mockServe.js'
 import 'swiper/css/swiper.css'
 
 Vue.component('TypeNav',TypeNav)
+Vue.component(Pagination.name,Pagination)
 Vue.config.productionTip = false
 
 new Vue({
