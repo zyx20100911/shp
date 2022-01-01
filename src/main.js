@@ -14,6 +14,7 @@ import 'swiper/css/swiper.css'
 
 Vue.component('TypeNav',TypeNav)
 Vue.component(Pagination.name,Pagination)
+//阻止显示生产模式的消息
 Vue.config.productionTip = false
 
 new Vue({

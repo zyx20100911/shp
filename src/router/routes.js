@@ -1,6 +1,6 @@
 //引入组件
 import home from "@/view/home";
-import login from "@/view/login";
+import login from "@/view/Login/login";
 import register from "@/view/register";
 import search from "@/view/Search";
 import detail from "@/view/Detail";

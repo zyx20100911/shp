@@ -15,6 +15,15 @@ export const reqGetGoodsList = (params) => request.post('/list', params)
 //detail模块请求/api/item/{ skuId }
 export const reqGetDetailInfo = skuId => request.get(`/item/${skuId}`)
 //添加购物车接口
-export const reqAddToCart = ({skuId ,skuNum }) => request.post(`/cart/addToCart/${ skuId }/${ skuNum }`)
+export const reqAddToCart = ({skuId, skuNum}) => request.post(`/cart/addToCart/${skuId}/${skuNum}`)
 //获取购物车列表接口/cart/cartList
-export const reqGetCartList = ()=>request.get('/cart/cartList')
+export const reqGetCartList = () => request.get('/cart/cartList')
+
+//获取验证码接口
+export const reqGetCode = (phone) => {
+    return request.get(`/user/passport/sendCode/phone`, {
+        params: {
+            phone
+        }
+    })
+}
